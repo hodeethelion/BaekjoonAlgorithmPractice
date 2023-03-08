@@ -1,11 +1,10 @@
-for _ in range(int(input())):
-    d = [int(x) for x in input().split()]
-    over = 0
-    person = d[0]
-    scores = d[1:] 
-    mean = (sum(scores)/ person) 
-    for score in scores:
-            if score > mean:
-                over += 1
-    perc = round(over/len(scores)*100, 3)
-    print(str(format(perc,'.3f'))+"%")
+import sys
+test_case = int(sys.stdin.readline())
+for _ in range(test_case):
+    stud_score = list(map(int, sys.stdin.readline().split()))
+    avg = sum(stud_score[1:])/ stud_score[0]
+    over_std = 0
+    for score in stud_score[1:]:
+        if score > avg:
+            over_std += 1
+    print(f'{round(over_std*100/stud_score[0],3):.3f}%')
