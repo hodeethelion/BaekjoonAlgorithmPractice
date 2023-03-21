@@ -1,35 +1,30 @@
 import sys
+input = sys.stdin.readline
 sys.setrecursionlimit(10**6)
-n_point, n_line = map(int, sys.stdin.readline().split())
-graph = [ [] for _ in range(n_point + 1)]
 
+n_point, n_line = map(int, input().split())
+graph = [[] for _ in range(n_point+1)]
 for _ in range(n_line):
-    a, b = map(int, sys.stdin.readline().split())
+    a, b = map(int, input().split())
     graph[a].append(b)
     graph[b].append(a)
-    
-for item in graph:
-    item.sort()
-visited = [False] * (n_point + 1)
-count = 1
+visited = [False] * (n_point +1)
 
-def dfs(graph, start):
-    global count
-    global visited
-    visited[start] = True
-    # print(start, ' visited!')
+
+def dfs(graph, start, visited):
+    if visited[start] == False:
+        visited[start] = True
+    # else:
+    #     return
     for item in graph[start]:
-        if not visited[item]:
-            dfs(graph, item)
-dfs_count = 0
-visited = [False] * (n_point + 1)
+        if visited[item] == False:
+            visited[item] = True
+            dfs(graph, item, visited)
+    return True
 
-for index in range(1, len(visited)):
-    if visited[index] == False:
-        dfs(graph, index)
-        # print('linked over! ')
-        dfs_count += 1
-        # print(visited)
-    else:
-        pass
-print(dfs_count)
+count = 0
+for i in range(1, n_point+1):
+    if visited[i] == False:
+        dfs(graph, i, visited)
+        count += 1 
+print(count)
