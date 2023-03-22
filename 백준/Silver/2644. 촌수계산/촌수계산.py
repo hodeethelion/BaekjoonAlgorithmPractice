@@ -1,25 +1,35 @@
+import sys
+input = sys.stdin.readline
 n_people = int(input())
-find_a, find_b = map(int,input().split())
-n_link = int(input())
-graph = [[] for _ in range(n_people+1)]
-
-for _ in range(n_link):
+start_p , end_p = map(int, input().split())
+n_line = int(input())
+graph= [[] for _ in range(n_people+1)]
+for _ in range(n_line):
     a, b = map(int, input().split())
     graph[a].append(b)
     graph[b].append(a)
-import sys
+
 sys.setrecursionlimit(10**6)
 
-visited = [False for _ in range(n_people+1)] 
+visited = [0] * (n_people + 1)
+ans = []
 
 def dfs(start, count):
-    global find_b
-    visited[start] = True
-    if start == find_b:
-        print(count)
-        sys.exit(0)
+    global end_p
+    # print(start)
+    visited[start] = 1
+    if start == end_p:
+        ans.append(count)
+        # print('yala')
+        return
     for item in graph[start]:
-        if not visited[item]:
+        # print(item)
+        if visited[item] == 0:
+            visited[item] = 1
             dfs(item, count+1)
-dfs(find_a, 0)
-print(-1)
+
+dfs(start_p, 0)
+try:
+    print(min(ans))
+except:
+    print(-1)
