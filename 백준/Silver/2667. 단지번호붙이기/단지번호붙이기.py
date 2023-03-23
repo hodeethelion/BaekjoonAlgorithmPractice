@@ -1,51 +1,47 @@
-#BFS
-from collections import deque
 import sys
-
+from collections import deque
+input = sys.stdin.readline
 n = int(input())
-graph = [ ]
+graph = []
 for _ in range(n):
-    graph.append(list(map(int, input())))
-# print(n)
-# print(graph)
+    graph.append(list(map(int, input().strip())))
+# for i in graph:
+#     print(i)
 
-dr = [-1,1,0,0]
-dc = [0,0,-1,1]
-
+dr= [-1,1,0,0]
+dc= [0,0,-1,1]
 visited = [[0]* n for _ in range(n)]
-ans = []
-def bfs(row, col):
+# print(visited)
+count = 0
+
+def bfs(start_r, start_c):
+    global count
     q = deque()
-    if visited[row][col] == 1:
-        return
-    if visited[row][col] == 0:
-        visited[row][col] = 1
-        # 큐 세팅
-        q.append((row, col))
-        town = 1
-        while q:
-            cur_row, cur_col = q.popleft()
-            for i in range(4):
-                next_row = cur_row + dr[i]
-                next_col = cur_col + dc[i]
-                if 0<=next_row <n and 0<=next_col <n and \
-                    visited[next_row][next_col] == 0 and \
-                    graph[next_row][next_col] == 1:
-                    visited[next_row][next_col] = 1 
-                    q.append((next_row, next_col))
-                    town += 1
-    return town
-
-
+    q.append((start_r, start_c))
+    visited[start_r][start_c] = 1
+    count += 1
+    while q:
+        cur_r, cur_c = q.popleft()
+        for i in range(4):
+            next_r = cur_r + dr[i]
+            next_c = cur_c + dc[i]
+            if 0<= next_r <n and \
+               0<= next_c <n and \
+               visited[next_r][next_c] == 0 and\
+               graph[next_r][next_c] == 1:
+                count+=1
+                # print(count)
+                visited[next_r][next_c] = 1 
+                q.append((next_r, next_c))
+    return count
+ans_list= []
 for i in range(n):
     for j in range(n):
-        if graph[i][j] == 1:
-            k = bfs(i, j)
-            if k == None or k == 0:
-                continue
-            else:
-                ans.append(k)
-ans.sort()
-print(len(ans))
-for i in ans:
+        if visited[i][j]== 0 and graph[i][j] ==1:
+            count = 0
+            ans_list.append(bfs(i,j))
+# print(ans_list)
+ans_list.sort()
+print(len(ans_list))
+for i in ans_list:
     print(i)
