@@ -1,44 +1,44 @@
-# BFS와 DFS
-import sys
 from collections import deque
-n_point, n_line, start = map(int, input().split())
-graph = [[] for i in range(n_point+1)]
 
-# 그래프 채우기
-for _ in range(n_line):
+n, m, start = map(int, input().split())
+graph = [[] for _ in range(n+1)]
+
+for _ in range(m):
     a, b = map(int, input().split())
     graph[a].append(b)
     graph[b].append(a)
-    
-for item in graph:
-    item.sort()
+for idx in range(n+1):
+    graph[idx].sort()
 
-#DFS 
-visited = [False] * (n_point+1)
+visited = [False for _ in range(n+1)]
+ans = []
+def dfs(start_point):
+    visited[start_point] = True
+    ans.append(start_point)
+    for item in graph[start_point]:
+        if visited[item] == False:
+            dfs(item)
+    else:
+        return
 
-def dfs(graph, start, visited):
-    visited[start] = True
-    print(start, end=' ')
-    for item in graph[start]:
-        if not visited[item]:
-            dfs(graph, item, visited)
-    
-dfs(graph, start, visited)
+dfs(start)
+ans = list(map(str, ans))
+print(' '.join(ans))
 
-print()
-#BFS
-visited = [False] * (n_point+1)
+visited = [False for _ in range(n+1)]
+ans = []
 
-def bfs(graph, start, visited):
-    que = deque([start])
-    visited[start] = True
-    while que:
-        v = que.popleft()
-        print(v, end= ' ')
-        for item in graph[v]:
-            if not visited[item]:
-                que.append(item)
+def bfs(start_point):
+    q = deque([start_point])
+    visited[start_point] = True
+    ans.append(start_point)
+    while q:
+        next = q.popleft()
+        for item in graph[next]:
+            if visited[item] == False:
+                ans.append(item)
+                q.append(item)
                 visited[item] = True
-
-
-bfs(graph, start, visited)
+bfs(start)
+ans = list(map(str, ans))
+print(' '.join(ans))
